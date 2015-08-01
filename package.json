@@ -1,0 +1,25 @@
+{
+  "name": "report-only-capture",
+  "version": "1.0.0",
+  "description": "Utility for testing the wide array of CSP reports.",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^1.4.0",
+    "browserstack-webdriver": "^2.41.1",
+    "couchbase": "^2.0.10",
+    "hapi": "^8.8.1",
+    "hapi-negotiator": "^2.0.1",
+    "lodash": "^3.10.0",
+    "md5": "^2.0.0",
+    "object-hash": "^0.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "csp"
+  ],
+  "author": "Zack Tollman",
+  "license": "MIT"
+}
