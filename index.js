@@ -65,6 +65,7 @@ if (cluster.isMaster) {
             throw err;
           } else {
             reply( data );
+            console.log(data);
           }
         });
       }
