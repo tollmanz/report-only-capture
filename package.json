@@ -10,6 +10,7 @@
     "handlebars": "^3.0.3",
     "hapi": "^8.8.1",
     "hapi-negotiator": "^2.0.1",
+    "json-2-csv": "^1.3.0",
     "lodash": "^3.10.0",
     "md5": "^2.0.0",
     "object-hash": "^0.8.0",
