@@ -65,7 +65,11 @@ bucket.query(query, function(err, results) {
       var headers = _.extend({}, baseHeaders, getResult.value.header);
       var body = _.extend({}, baseReport, getResult.value.body['csp-report']);
 
-      console.log(_.difference(_.keys(body), _.keys(baseReport)));
+      var diff = _.difference(_.keys(body), _.keys(baseReport));
+
+      if (!_.isEmpty(diff)) {
+        console.log(diff);
+      }
 
       var all = {
         config: config,
