@@ -3,6 +3,13 @@ var async = require("async");
 var webdriver = require('browserstack-webdriver');
 var querystring = require('querystring');
 
+var user = (process.argv[2]) ? process.argv[2] : '';
+var pass = (process.argv[3]) ? process.argv[3] : '';
+
+if (user === '' || pass === '') {
+  process.exit('Please set user and password');
+}
+
 var browsers = [
   //No reporting
   {
@@ -316,8 +323,8 @@ var browsers = [
 
 // Input capabilities
 var caps = {
-  'browserstack.user': 'zacktollman2',
-  'browserstack.key': 's7fegnaduDZu2sHsoRqX',
+  'browserstack.user': user,
+  'browserstack.key': pass,
   'browserstack.debug': true
 }
 
