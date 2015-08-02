@@ -58,7 +58,7 @@ bucket.query(query, function(err, results) {
   async.each(results, function(result, callback) {
     bucket.get(result.id, function(err, getResult) {
       if (err) {
-        throw err;
+        console.log(err, result.id);
       }
 
       var config = _.extend({}, baseConfig, getResult.value.query);
@@ -72,21 +72,20 @@ bucket.query(query, function(err, results) {
       };
 
       reports.push(all);
-      console.log( all );
       callback();
     });
   }, function(err){
       if (err) {
-        throw err;
+        console.log(err);
       } else {
         json2csv.json2csv(reports, function(err, csv) {
           if (err) {
-            throw err;
+            console.log(err);
           }
 
           fs.writeFile('./reports.csv', csv, function(err) {
               if (err) {
-                  throw err;
+                console.log(err);
               }
 
               console.log('The file was saved!');
