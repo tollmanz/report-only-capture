@@ -33,6 +33,14 @@ server.route({
         .header(
           'Content-Security-Policy',
           "default-src 'self' https:; report-uri " + url
+        )
+        .header(
+          'X-Content-Security-Policy',
+          "default-src 'self' https:; report-uri " + url
+        )
+        .header(
+          'X-Webkit-CSP',
+          "default-src 'self' https:; report-uri " + url
         );
     }
   }
