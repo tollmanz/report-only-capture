@@ -69,27 +69,27 @@ bucket.query(query, function(err, results) {
         console.log(err, result.id);
       }
 
+      delete getResult.value.query.resolution;
+      delete getResult.value.query.device;
+
+      if (_.has(getResult.value.query, 'version')) {
+        getResult.value.query['browser_version'] = getResult.value.query.version;
+      }
+      delete getResult.value.query.version;
+
+      if (_.has(getResult.value.query, 'browserName')) {
+        getResult.value.query.browser = getResult.value.query.browserName;
+      }
+      delete getResult.value.query.browserName;
+
+      if (_.has(getResult.value.query, 'platform')) {
+        getResult.value.query.os = getResult.value.query.platform;
+      }
+      delete getResult.value.query.platform;
+
       var config = _.extend({}, baseConfig, getResult.value.query);
       var headers = _.extend({}, baseHeaders, getResult.value.header);
       var body = _.extend({}, baseReport, getResult.value.body['csp-report']);
-
-      var diff = _.difference(_.keys(body), _.keys(baseReport));
-
-      if (!_.isEmpty(diff)) {
-        console.log(diff);
-      }
-
-      var diff = _.difference(_.keys(headers), _.keys(baseHeaders));
-
-      if (!_.isEmpty(diff)) {
-        console.log(diff);
-      }
-
-      var diff = _.difference(_.keys(config), _.keys(baseConfig));
-
-      if (!_.isEmpty(diff)) {
-        console.log(diff);
-      }
 
       var all = {
         config: config,
