@@ -329,7 +329,7 @@ var caps = {
 }
 
 
-var base_url = 'https://www.tollmanz.com/test.html';
+var base_url = 'http://45.55.25.245:8123/csp';
 
 async.each(browsers, function(browser, callback) {
   var capabilities = _.extend({}, browser, caps);
