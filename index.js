@@ -1,6 +1,7 @@
 var cluster = require('cluster');
 var host = (process.argv[2]) ? process.argv[2] : 'localhost';
-var port = (process.argv[3]) ? process.argv[3] : 8000;
+var bucketName = (process.argv[3]) ? process.argv[3] : 'default';
+var port = (process.argv[4]) ? process.argv[4] : 8000;
 
 // Code to run if we're in the master process
 if (cluster.isMaster) {
@@ -28,7 +29,7 @@ if (cluster.isMaster) {
   var hash = require('object-hash');
   var couchbase = require('couchbase');
   var cluster = new couchbase.Cluster('couchbase://127.0.0.1');
-  var bucket = cluster.openBucket('default');
+  var bucket = cluster.openBucket(bucketName);
 
   var server = new Hapi.Server();
   server.connection({
