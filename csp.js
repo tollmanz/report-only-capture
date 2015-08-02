@@ -46,9 +46,6 @@ server.route({
       var getVars = querystring.stringify(request.query);
       var url = (getVars !== '') ? cspUrl + '?' + getVars : cspUrl;
 
-      console.log(          directiveString + ' report-uri ' + url
-);
-
       reply
         .view('csp')
         .header(
