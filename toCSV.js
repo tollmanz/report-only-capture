@@ -65,6 +65,8 @@ bucket.query(query, function(err, results) {
       var headers = _.extend({}, baseHeaders, getResult.value.header);
       var body = _.extend({}, baseReport, getResult.value.body['csp-report']);
 
+      console.log(_.difference(_.keys(body), _.keys(baseReport)));
+
       var all = {
         config: config,
         headers: headers,
@@ -83,13 +85,13 @@ bucket.query(query, function(err, results) {
             console.log(err);
           }
 
-          fs.writeFile('./reports.csv', csv, function(err) {
-              if (err) {
-                console.log(err);
-              }
+          // fs.writeFile('./reports.csv', csv, function(err) {
+          //     if (err) {
+          //       console.log(err);
+          //     }
 
-              console.log('The file was saved!');
-          });
+          //     console.log('The file was saved!');
+          // });
         }, {
           DELIMITER: {
             FIELD: "\t"
