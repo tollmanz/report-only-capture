@@ -2,7 +2,7 @@ var Hapi = require('hapi');
 var Path = require('path');
 var host = (process.argv[2]) ? process.argv[2] : 'localhost';
 var port = (process.argv[3]) ? process.argv[3] : '8123';
-var cspUrl = (process.argv[3]) ? process.argv[3] : 'http://localhost:8000/csp-report';
+var cspUrl = (process.argv[4]) ? process.argv[4] : 'http://localhost:8000/csp-report';
 var querystring = require('querystring');
 var handlebars = require('handlebars');
 
