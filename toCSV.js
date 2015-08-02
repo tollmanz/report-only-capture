@@ -109,13 +109,13 @@ bucket.query(query, function(err, results) {
             console.log(err);
           }
 
-          // fs.writeFile('./reports.csv', csv, function(err) {
-          //     if (err) {
-          //       console.log(err);
-          //     }
+          fs.writeFile('./reports.csv', csv, function(err) {
+              if (err) {
+                console.log(err);
+              }
 
-          //     console.log('The file was saved!');
-          // });
+              console.log('The file was saved!');
+          });
         }, {
           DELIMITER: {
             FIELD: "\t"
