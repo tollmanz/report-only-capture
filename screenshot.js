@@ -3,6 +3,13 @@ var async = require('async');
 var request = require('request');
 var querystring = require('querystring');
 
+var user = (process.argv[2]) ? process.argv[2] : '';
+var pass = (process.argv[3]) ? process.argv[3] : '';
+
+if (user === '' || pass === '') {
+  process.exit('Please set user and password');
+}
+
 var browsers = [{
   "device": null,
   "browser_version": "37.0",
@@ -12,8 +19,8 @@ var browsers = [{
 }];
 
 var creds = {
-  user: 'zacktollman2',
-  pass: 's7fegnaduDZu2sHsoRqX',
+  user: user,
+  pass: pass,
 };
 
 // Placeholder for shared config
