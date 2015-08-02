@@ -72,7 +72,7 @@ bucket.query(query, function(err, results) {
       };
 
       reports.push(all);
-
+      console.log( all );
       callback();
     });
   }, function(err){
