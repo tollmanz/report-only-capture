@@ -3,15 +3,13 @@ var async = require('async');
 var request = require('request');
 var querystring = require('querystring');
 
-var browsers = [
-  {
-    "device": null,
-    "browser_version": "37.0",
-    "os": "Windows",
-    "browser": "firefox",
-    "os_version": "8"
-  }
-];
+var browsers = [{
+  "device": null,
+  "browser_version": "37.0",
+  "os": "Windows",
+  "browser": "firefox",
+  "os_version": "8"
+}];
 
 var creds = {
   user: 'zacktollman2',
