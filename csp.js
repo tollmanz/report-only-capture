@@ -6,6 +6,24 @@ var cspUrl = (process.argv[4]) ? process.argv[4] : 'http://localhost:8000/csp-re
 var querystring = require('querystring');
 var handlebars = require('handlebars');
 
+var baseDirective = "'self' https:";
+
+var directivesNames = [
+  'default-src',
+  'child-src',
+  'connect-src',
+  'font-src',
+  'img-src',
+  'media-src',
+  'object-src',
+  'script-src',
+  'style-src',
+  'form-action'
+];
+
+var directiveString = directivesNames.join(' ' + baseDirective + '; ');
+directiveString += ' ' + baseDirective + "; frame-ancestors 'none'; plugin-types 'none';";
+
 var server = new Hapi.Server();
 server.connection({
   host: host,
@@ -28,19 +46,22 @@ server.route({
       var getVars = querystring.stringify(request.query);
       var url = (getVars !== '') ? cspUrl + '?' + getVars : cspUrl;
 
+      console.log(          directiveString + ' report-uri ' + url
+);
+
       reply
         .view('csp')
         .header(
           'Content-Security-Policy',
-          "default-src 'self' https:; report-uri " + url
+          directiveString + ' report-uri ' + url
         )
         .header(
           'X-Content-Security-Policy',
-          "default-src 'self' https:; report-uri " + url
+          directiveString + ' report-uri ' + url
         )
         .header(
           'X-Webkit-CSP',
-          "default-src 'self' https:; report-uri " + url
+          directiveString + ' report-uri ' + url
         );
     }
   }
