@@ -18,8 +18,8 @@ var baseConfig = {
   'os_version': nullVal,
   'resolution': nullVal,
   'browserName': nullVal,
-  'platform': nullVall,
-  'device': nullVall,
+  'platform': nullVal,
+  'device': nullVal,
   'version': nullVal
 };
 
