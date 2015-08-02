@@ -15,7 +15,12 @@ var baseConfig = {
   'browser': nullVal,
   'browser_version': nullVal,
   'os': nullVal,
-  'os_version': nullVal
+  'os_version': nullVal,
+  'resolution': nullVal,
+  'browserName': nullVal,
+  'platform': nullVall,
+  'device': nullVall,
+  'version': nullVal
 };
 
 var baseHeaders = {
@@ -32,7 +37,10 @@ var baseHeaders = {
   'referer': nullVal,
   'cache-control': nullVal,
   'origin': nullVal,
-  'x-requested-with': nullVal
+  'x-requested-with': nullVal,
+  'accept-charset': nullVal,
+  'pragma': nullVal,
+  'ua-cpu': nullVal
 };
 
 var baseReport = {
