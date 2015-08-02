@@ -71,6 +71,18 @@ bucket.query(query, function(err, results) {
         console.log(diff);
       }
 
+      var diff = _.difference(_.keys(headers), _.keys(baseHeaders));
+
+      if (!_.isEmpty(diff)) {
+        console.log(diff);
+      }
+
+      var diff = _.difference(_.keys(config), _.keys(baseConfig));
+
+      if (!_.isEmpty(diff)) {
+        console.log(diff);
+      }
+
       var all = {
         config: config,
         headers: headers,
