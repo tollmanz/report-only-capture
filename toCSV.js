@@ -15,12 +15,7 @@ var baseConfig = {
   'browser': nullVal,
   'browser_version': nullVal,
   'os': nullVal,
-  'os_version': nullVal,
-  'resolution': nullVal,
-  'browserName': nullVal,
-  'platform': nullVal,
-  'device': nullVal,
-  'version': nullVal
+  'os_version': nullVal
 };
 
 var baseHeaders = {
@@ -33,7 +28,6 @@ var baseHeaders = {
   'content-type': nullVal,
   'connection': nullVal,
   'cookies': nullVal,
-  'x-content-type': nullVal,
   'referer': nullVal,
   'cache-control': nullVal,
   'origin': nullVal,
@@ -69,6 +63,7 @@ bucket.query(query, function(err, results) {
         console.log(err, result.id);
       }
 
+      // Handle inconsistencies with the data mining from Browserstack
       delete getResult.value.query.resolution;
       delete getResult.value.query.device;
 
@@ -86,6 +81,13 @@ bucket.query(query, function(err, results) {
         getResult.value.query.os = getResult.value.query.platform;
       }
       delete getResult.value.query.platform;
+
+      // Convert x-content-type to content-type
+      if (_.has(getResult.value.header['x-content-type'])) {
+        console.log('converting');
+        getResult.value.header['content-type'] = getResult.value.header['x-content-type'];
+      }
+      delete getResult.value.header['x-content-type'];
 
       var config = _.extend({}, baseConfig, getResult.value.query);
       var headers = _.extend({}, baseHeaders, getResult.value.header);
