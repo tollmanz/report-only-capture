@@ -147,7 +147,6 @@ bucket.query(query, function(err, results) {
           }
         });
 
-
         json2csv.json2csv(leftSide, function(err, csv) {
           if (err) {
             console.log(err);
@@ -164,6 +163,14 @@ bucket.query(query, function(err, results) {
           DELIMITER: {
             FIELD: "\t"
           }
+        });
+
+        fs.writeFile('./reports.json', JSON.stringify(reports), function(err) {
+          if (err) {
+            console.log(err);
+          }
+
+          console.log('The file was saved!');
         });
       }
 
