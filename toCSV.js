@@ -91,6 +91,9 @@ bucket.query(query, function(err, results) {
       var headers = _.extend({}, baseHeaders, getResult.value.header);
       var body = _.extend({}, baseReport, getResult.value.body['csp-report']);
 
+      // Remove new lines in request headers
+      body['request-headers'] = body['request-headers'].replace(/(?:\r\n|\r|\n)/g, '');
+
       var all = {
         config: config,
         headers: headers,
@@ -104,12 +107,53 @@ bucket.query(query, function(err, results) {
       if (err) {
         console.log(err);
       } else {
+        var reportsClone = _.clone(reports);
+        var half_length = Math.ceil(reportsClone.length / 2);
+        var leftSide = reportsClone.splice(0, half_length);
+
         json2csv.json2csv(reports, function(err, csv) {
           if (err) {
             console.log(err);
           }
 
           fs.writeFile('./reports.csv', csv, function(err) {
+              if (err) {
+                console.log(err);
+              }
+
+              console.log('The file was saved!');
+          });
+        }, {
+          DELIMITER: {
+            FIELD: "\t"
+          }
+        });
+
+        json2csv.json2csv(reportsClone, function(err, csv) {
+          if (err) {
+            console.log(err);
+          }
+
+          fs.writeFile('./reports-1.tsv', csv, function(err) {
+              if (err) {
+                console.log(err);
+              }
+
+              console.log('The file was saved!');
+          });
+        }, {
+          DELIMITER: {
+            FIELD: "\t"
+          }
+        });
+
+
+        json2csv.json2csv(leftSide, function(err, csv) {
+          if (err) {
+            console.log(err);
+          }
+
+          fs.writeFile('./reports-2.tsv', csv, function(err) {
               if (err) {
                 console.log(err);
               }
