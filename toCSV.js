@@ -84,7 +84,6 @@ bucket.query(query, function(err, results) {
 
       // Convert x-content-type to content-type
       if (_.has(getResult.value.header, 'x-content-type')) {
-        console.log('converting');
         getResult.value.header['content-type'] = getResult.value.header['x-content-type'];
       }
       delete getResult.value.header['x-content-type'];
