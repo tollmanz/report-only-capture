@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var async = require("async");
+var fs = require('fs');
 var webdriver = require('browserstack-webdriver');
 var querystring = require('querystring');
 
@@ -7,166 +7,37 @@ var user = (process.argv[2]) ? process.argv[2] : '';
 var pass = (process.argv[3]) ? process.argv[3] : '';
 
 if (user === '' || pass === '') {
-  process.exit('Please set user and password');
+  console.error('Please set user and password');
+  process.exit();
 }
 
-var browsers = [
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '44.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '43.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '42.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '41.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '40.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '39.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '38.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '37.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '36.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '35.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '34.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '33.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '32.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '31.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Chrome',
-    'browser_version' : '30.0',
-    'os' : 'OS X',
-    'os_version' : 'Yosemite',
-    'resolution' : '1024x768',
-  },
-  {
-    'browser' : 'Opera',
-    'browser_version' : '12.16',
-    'os' : 'Windows',
-    'os_version' : '8.1',
-    'resolution' : '1600x1200'
-  },
-  {
-    'browser' : 'Opera',
-    'browser_version' : '12.15',
-    'os' : 'Windows',
-    'os_version' : '8.1',
-    'resolution' : '1600x1200'
-  },
-  {
-    'browserName' : 'android',
-    'platform' : 'ANDROID',
-    'device' : 'Google Nexus 5',
-    'version' : '5.0'
-  },
-  {
-    'browserName' : 'android',
-    'platform' : 'ANDROID',
-    'device' : 'Samsung Galaxy S5',
-    'version' : '4.4'
-  },
-  {
-    'browserName' : 'android',
-    'platform' : 'ANDROID',
-    'device' : 'Samsung Galaxy S4',
-    'version' : '4.3'
-  },
-  {
-    'browserName' : 'android',
-    'platform' : 'ANDROID',
-    'device' : 'Google Nexus 4',
-    'version' : '4.2'
-  },
-  {
-    'browserName' : 'android',
-    'platform' : 'ANDROID',
-    'device' : 'Samsung Galaxy S3',
-    'version' : '4.1'
-  },
-  {
-    'browserName' : 'android',
-    'platform' : 'ANDROID',
-    'device' : 'Google Nexus',
-    'version' : '4.0'
+var testPage = (process.argv[4]) ? process.argv[4] : 'http://localhost:8123/csp';
+
+// Read the file and send to the callback
+//var browsers = require('./assets/browsers.json');
+var browsers = [{
+  "os": "Windows",
+  "device": null,
+  "browser_version": "39.0",
+  "browser": "firefox",
+  "os_version": "7"
+}];
+var cleanedList = [];
+
+browsers.forEach(function(browser) {
+  /**
+   * Exclude browsers/devices that routinely produce errors on Browserstack, as
+   * well as browsers that are known to not send CSP reports.
+   */
+  var browserException = ['firefox', 'ie', 'opera'];
+  var deviceException = ['iPad 4th Gen'];
+
+  if (!_.includes(browserException, browser.browser) && !_.includes(deviceException, browser.device)) {
+    if (!_.findWhere(cleanedList, {browser: browser.browser, browser_version: browser.browser_version})) {
+      cleanedList.push(browser);
+    }
   }
-];
+});
 
 // Input capabilities
 var caps = {
@@ -175,23 +46,24 @@ var caps = {
   'browserstack.debug': true
 }
 
-
-var base_url = 'http://45.55.25.245:8123/csp';
-
-async.each(browsers, function(browser, callback) {
+cleanedList.forEach(function(browser) {
   var capabilities = _.extend({}, browser, caps);
   var get_vars = querystring.stringify(browser);
-  var url = base_url + '?' + get_vars;
+  var url = testPage + '?' + get_vars;
 
   console.log(url);
 
-  var driver = new webdriver.Builder().
-    usingServer('http://hub.browserstack.com/wd/hub').
-    withCapabilities(capabilities).
-    build();
+  try {
+    var driver = new webdriver.Builder()
+      .usingServer('http://hub.browserstack.com/wd/hub')
+      .withCapabilities(capabilities)
+      .build();
 
-  driver.get(url);
-  driver.quit();
-
-  callback();
+    driver.get(url);
+  } catch(error) {
+    console.log(error);
+    console.log(browser);
+  } finally {
+    driver.quit();
+  }
 });
