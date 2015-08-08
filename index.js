@@ -75,6 +75,7 @@ server.route({
 
       reply
         .view('csp')
+        .state('snickerdoodle', 'cinnamon')
         .header(
           'Content-Security-Policy',
           directiveString + ' report-uri ' + url
