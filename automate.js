@@ -14,14 +14,7 @@ if (user === '' || pass === '') {
 var testPage = (process.argv[4]) ? process.argv[4] : 'http://localhost:8123/csp';
 
 // Read the file and send to the callback
-//var browsers = require('./assets/browsers.json');
-var browsers = [{
-  "os": "Windows",
-  "device": null,
-  "browser_version": "39.0",
-  "browser": "firefox",
-  "os_version": "7"
-}];
+var browsers = require('./assets/browsersAutomate.json');
 var cleanedList = [];
 
 browsers.forEach(function(browser) {

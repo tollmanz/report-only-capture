@@ -6,6 +6,14 @@
   <body>
     <p>Hello there!</p>
 
-
+    <ul>
+      {{#each browsers}}
+      <li>
+        <a href="{{baseURL}}csp?os={{os}}&os_version={{os_version}}&browser={{browser}}&browser_version={{browser_version}}">
+          {{os}} {{os_version}}{{#if device}} {{device}}{{/if}} {{browser}} {{browser_version}}
+        </a>
+      </li>
+      {{/each}}
+    </ul>
   </body>
 </html>

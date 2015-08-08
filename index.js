@@ -1,5 +1,6 @@
 var Hapi = require('hapi');
 var Path = require('path');
+var _ = require('lodash');
 var querystring = require('querystring');
 var handlebars = require('handlebars');
 
@@ -26,6 +27,26 @@ var directivesNames = [
 
 var directiveString = directivesNames.join(' ' + baseDirective + '; ');
 directiveString += ' ' + baseDirective + "; frame-ancestors 'none'; plugin-types 'none';";
+
+var baseURL = 'http://' + host + ':' + port + '/';
+
+var browsers = require('./assets/browsersLive.json');
+var dedupedBrowsers = [];
+
+browsers.reverse().forEach(function(browser) {
+  /**
+   * Exclude browsers/devices that routinely produce errors on Browserstack, as
+   * well as browsers that are known to not send CSP reports.
+   */
+  var browserException = [''];
+  var deviceException = [''];
+
+  if (!_.includes(browserException, browser.browser) && !_.includes(deviceException, browser.device)) {
+    if (!_.findWhere(dedupedBrowsers, {browser: browser.browser, browser_version: browser.browser_version})) {
+      dedupedBrowsers.push(browser);
+    }
+  }
+});
 
 var server = new Hapi.Server();
 server.connection({
@@ -58,7 +79,13 @@ server.route({
   config: {
     handler: function(request, reply) {
       reply
-        .view('index')
+        .view(
+          'index',
+          {
+            baseURL: baseURL,
+            browsers: dedupedBrowsers
+          }
+        )
         .state('snickerdoodle', 'cinnamon');
     }
   }
@@ -77,7 +104,7 @@ server.route({
         .view(
           'csp',
           {
-            baseURL: 'http://' + host + ':' + port + '/'
+            baseURL: baseURL
           }
         )
         .state('snickerdoodle', 'cinnamon')
