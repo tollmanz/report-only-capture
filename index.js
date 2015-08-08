@@ -9,7 +9,7 @@ var bucketName = (process.argv[4]) ? process.argv[4] : 'default';
 var cspPort = (process.argv[5]) ? process.argv[5] : port;
 var cspUrl = 'http://' + host + ':' + cspPort + '/csp-report';
 
-var baseDirective = " 'self' https:";
+var baseDirective = ' https://' + host + ':' + port + '/';
 
 var directivesNames = [
   'default-src',
@@ -74,7 +74,12 @@ server.route({
       var url = (getVars !== '') ? cspUrl + '?' + getVars : cspUrl;
 
       reply
-        .view('csp')
+        .view(
+          'csp',
+          {
+            baseURL: 'http://' + host + ':' + port + '/'
+          }
+        )
         .state('snickerdoodle', 'cinnamon')
         .header(
           'Content-Security-Policy',
