@@ -36,7 +36,8 @@ var baseHeaders = {
   'x-requested-with': nullVal,
   'accept-charset': nullVal,
   'pragma': nullVal,
-  'ua-cpu': nullVal
+  'ua-cpu': nullVal,
+  'x-forwarded-for': nullVal
 };
 
 var baseReport = {
