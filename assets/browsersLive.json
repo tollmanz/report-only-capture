@@ -9,13 +9,6 @@
   {
     "os": "OS X",
     "device": null,
-    "browser_version": "4.0",
-    "browser": "firefox",
-    "os_version": "Yosemite"
-  },
-  {
-    "os": "OS X",
-    "device": null,
     "browser_version": "5.0",
     "browser": "firefox",
     "os_version": "Yosemite"
