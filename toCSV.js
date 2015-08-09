@@ -95,7 +95,10 @@ bucket.query(query, function(err, results) {
       delete getResult.value.query.browser_version30;
       delete getResult.value.query.speed;
       delete getResult.value.query.host_ports;
-      delete getResult.value.body['csp-report'].blah;
+
+      if (_.has(getResult.value.body), 'csp-report')) {
+        delete getResult.value.body['csp-report'].blah;
+      }
 
       var config = _.extend({}, baseConfig, getResult.value.query);
       var headers = _.extend({}, baseHeaders, getResult.value.header);
