@@ -481,33 +481,5 @@
     "browser_version": "4.4",
     "browser": "android",
     "os_version": "4.4"
-  },
-  {
-    "os": "Android",
-    "device": "Galaxy S4",
-    "browser_version": "4.3",
-    "browser": "android",
-    "os_version": "4.3"
-  },
-  {
-    "os": "Android",
-    "device": "Nexus 4",
-    "browser_version": "4.2",
-    "browser": "android",
-    "os_version": "4.2"
-  },
-  {
-    "os": "Android",
-    "device": "Galaxy S3",
-    "browser_version": "4.1",
-    "browser": "android",
-    "os_version": "4.1"
-  },
-  {
-    "os": "Android",
-    "device": "Droid Razr",
-    "browser_version": "2.3",
-    "browser": "android",
-    "os_version": "2.3"
   }
 ]
