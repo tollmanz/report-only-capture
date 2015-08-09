@@ -261,41 +261,6 @@
   {
     "os": "OS X",
     "device": null,
-    "browser_version": "11.1",
-    "browser": "opera",
-    "os_version": "Mavericks"
-  },
-  {
-    "os": "OS X",
-    "device": null,
-    "browser_version": "11.6",
-    "browser": "opera",
-    "os_version": "Mavericks"
-  },
-  {
-    "os": "OS X",
-    "device": null,
-    "browser_version": "12.0",
-    "browser": "opera",
-    "os_version": "Mavericks"
-  },
-  {
-    "os": "OS X",
-    "device": null,
-    "browser_version": "12.12",
-    "browser": "opera",
-    "os_version": "Yosemite"
-  },
-  {
-    "os": "OS X",
-    "device": null,
-    "browser_version": "12.14",
-    "browser": "opera",
-    "os_version": "Yosemite"
-  },
-  {
-    "os": "OS X",
-    "device": null,
     "browser_version": "12.15",
     "browser": "opera",
     "os_version": "Yosemite"
