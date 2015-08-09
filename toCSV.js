@@ -96,7 +96,7 @@ bucket.query(query, function(err, results) {
       delete getResult.value.query.speed;
       delete getResult.value.query.host_ports;
 
-      if (_.has(getResult.value.body), 'csp-report')) {
+      if (_.has(getResult.value.body, 'csp-report')) {
         delete getResult.value.body['csp-report'].blah;
       }
 
