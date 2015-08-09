@@ -107,9 +107,20 @@ bucket.query(query, function(err, results) {
       // Remove new lines in request headers
       body['request-headers'] = body['request-headers'].replace(/(?:\r\n|\r|\n)/g, '');
 
-      //console.log(_.difference(_.keys(getResult.value.query), _.keys(baseConfig)));
-      //console.log(_.difference(_.keys(getResult.value.header), _.keys(baseHeaders)));
-      //console.log(_.difference(_.keys(getResult.value.body['csp-report']), _.keys(baseReport)));
+      // var diff = _.difference(_.keys(getResult.value.query), _.keys(baseConfig));
+      // if (!_.empty(diff)) {
+      //   console.log(diff);
+      // }
+
+      // var diff = _.difference(_.keys(getResult.value.header), _.keys(baseHeaders));
+      // if (!_.empty(diff)) {
+      //   console.log(diff);
+      // }
+
+      // var diff = _.difference(_.keys(getResult.value.body['csp-report']), _.keys(baseReport));
+      // if (!_.empty(diff)) {
+      //   console.log(diff);
+      // }
 
       var all = {
         config: config,
