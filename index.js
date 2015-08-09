@@ -48,6 +48,14 @@ browsers.reverse().forEach(function(browser) {
   }
 });
 
+dedupedBrowsers.forEach(function(browser) {
+  var url = 'https://www.browserstack.com/start#';
+  var getVars = querystring.stringify(browser);
+  var testURL = encodeURIComponent(baseURL + 'csp?' + getVars);
+
+  browser.stackURL = url + getVars + '&zoom_to_fit=true&full_screen=true&url=' + testURL;
+});
+
 var server = new Hapi.Server();
 server.connection({
   host: host,
@@ -82,7 +90,6 @@ server.route({
         .view(
           'index',
           {
-            baseURL: baseURL,
             browsers: dedupedBrowsers
           }
         )

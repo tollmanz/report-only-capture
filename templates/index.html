@@ -6,10 +6,10 @@
   <body>
     <p>Hello there!</p>
 
-    <ul>
+    <ul style="font-size:30px;">
       {{#each browsers}}
       <li>
-        <a href="{{baseURL}}csp?os={{os}}&os_version={{os_version}}&browser={{browser}}&browser_version={{browser_version}}">
+        <a href="{{stackURL}}">
           {{os}} {{os_version}}{{#if device}} {{device}}{{/if}} {{browser}} {{browser_version}}
         </a>
       </li>
