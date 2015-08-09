@@ -3,6 +3,7 @@ var async = require('async');
 var json2csv = require('json-2-csv');
 var fs = require('fs');
 var bucketName = (process.argv[2]) ? process.argv[2] : 'default';
+var chunkSize = (process.argv[3]) ? process.argv[3] : '400';
 var couchbase = require('couchbase');
 var cluster = new couchbase.Cluster('couchbase://127.0.0.1');
 var bucket = cluster.openBucket(bucketName);
@@ -15,7 +16,8 @@ var baseConfig = {
   'browser': nullVal,
   'browser_version': nullVal,
   'os': nullVal,
-  'os_version': nullVal
+  'os_version': nullVal,
+  'device': nullVal
 };
 
 var baseHeaders = {
@@ -27,7 +29,7 @@ var baseHeaders = {
   'content-length': nullVal,
   'content-type': nullVal,
   'connection': nullVal,
-  'cookies': nullVal,
+  'cookie': nullVal,
   'referer': nullVal,
   'cache-control': nullVal,
   'origin': nullVal,
@@ -88,12 +90,23 @@ bucket.query(query, function(err, results) {
       }
       delete getResult.value.header['x-content-type'];
 
+      // Because I was messing around with something at one point, these key could be in there
+      delete getResult.value.query.browser_version36;
+      delete getResult.value.query.browser_version30;
+      delete getResult.value.query.speed;
+      delete getResult.value.query.host_ports;
+      delete getResult.value.body['csp-report'].blah;
+
       var config = _.extend({}, baseConfig, getResult.value.query);
       var headers = _.extend({}, baseHeaders, getResult.value.header);
       var body = _.extend({}, baseReport, getResult.value.body['csp-report']);
 
       // Remove new lines in request headers
       body['request-headers'] = body['request-headers'].replace(/(?:\r\n|\r|\n)/g, '');
+
+      //console.log(_.difference(_.keys(getResult.value.query), _.keys(baseConfig)));
+      //console.log(_.difference(_.keys(getResult.value.header), _.keys(baseHeaders)));
+      //console.log(_.difference(_.keys(getResult.value.body['csp-report']), _.keys(baseReport)));
 
       var all = {
         config: config,
@@ -108,16 +121,17 @@ bucket.query(query, function(err, results) {
       if (err) {
         console.log(err);
       } else {
-        var reportsClone = _.clone(reports);
-        var half_length = Math.ceil(reportsClone.length / 2);
-        var leftSide = reportsClone.splice(0, half_length);
+        var date = new Date().getTime();
+        var dir = './data/' + date + '/';
+        fs.mkdir(dir);
 
+        // Save CSV
         json2csv.json2csv(reports, function(err, csv) {
           if (err) {
             console.log(err);
           }
 
-          fs.writeFile('./reports.csv', csv, function(err) {
+          fs.writeFile(dir + 'reports.csv', csv, function(err) {
               if (err) {
                 console.log(err);
               }
@@ -130,43 +144,35 @@ bucket.query(query, function(err, results) {
           }
         });
 
-        json2csv.json2csv(reportsClone, function(err, csv) {
-          if (err) {
-            console.log(err);
-          }
+        var reportChunks = [];
+        var reportsClone = _.clone(reports);
 
-          fs.writeFile('./reports-1.tsv', csv, function(err) {
-              if (err) {
-                console.log(err);
-              }
+        while (reportsClone.length > 0) {
+          reportChunks.push(reportsClone.splice(0, chunkSize));
+        };
 
-              console.log('The file was saved!');
+        reportChunks.forEach(function(items, index) {
+          console.log(items.length);
+          json2csv.json2csv(items, function(err, csv) {
+            if (err) {
+              console.log(err);
+            }
+
+            fs.writeFile(dir + 'reports-' + index + '.tsv', csv, function(err) {
+                if (err) {
+                  console.log(err);
+                }
+
+                console.log('The file was saved!');
+            });
+          }, {
+            DELIMITER: {
+              FIELD: "\t"
+            }
           });
-        }, {
-          DELIMITER: {
-            FIELD: "\t"
-          }
         });
 
-        json2csv.json2csv(leftSide, function(err, csv) {
-          if (err) {
-            console.log(err);
-          }
-
-          fs.writeFile('./reports-2.tsv', csv, function(err) {
-              if (err) {
-                console.log(err);
-              }
-
-              console.log('The file was saved!');
-          });
-        }, {
-          DELIMITER: {
-            FIELD: "\t"
-          }
-        });
-
-        fs.writeFile('./reports.json', JSON.stringify(reports), function(err) {
+        fs.writeFile(dir + 'reports.json', JSON.stringify(reports), function(err) {
           if (err) {
             console.log(err);
           }
